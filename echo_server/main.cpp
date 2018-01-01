@@ -1,9 +1,9 @@
-#include "server.hpp"
 
 #include <iostream>
-#include "session_listener.hpp"
+#include <tls/session_listener.hpp>
+#include <tls/server.hpp>
 
-class echo : public session_listener {
+class echo : public tls::session_listener {
 public:
     void on_session_started() {
         std::cout << "Echo started" << std::endl;
@@ -19,7 +19,7 @@ public:
 };
 
 int main(int argc, char ** argv) {
-    auto serv = new server("key.pem", "cert.pem");
+    auto serv = new tls::server("ca.key", "ca.crt");
 
     serv->set_session_listener_factory([](){
         return std::make_unique<echo>();

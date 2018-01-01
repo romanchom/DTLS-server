@@ -2,10 +2,7 @@
 
 #include "entropy.hpp"
 
-#include <mbedtls/config.h>
 #include <mbedtls/entropy.h>
-
-#include <iostream>
 
 namespace tls {
     class standard_entropy : public entropy {

@@ -1,14 +1,14 @@
 #pragma once 
 
 #include <stdexcept>
+#include <iostream>
 
-#include <mbedtls/config.h>
 #include <mbedtls/ssl.h>
 
 #include "configuration.hpp"
 #include "timer.hpp"
 #include "basic_input_output.hpp"
-#include <mbedtls/error.h>
+#include "exception.hpp"
 
 namespace tls {
     class ssl {
@@ -26,14 +26,14 @@ namespace tls {
         void setup(configuration * a_configuration) {
             auto error = mbedtls_ssl_setup(&m_ssl, a_configuration->get());
             if (0 != error) {
-                throw std::runtime_error("Failed to setup ssl.");
+                throw tls::exception(error);
             }
         }
 
         void reset_session() {
             auto error = mbedtls_ssl_session_reset(&m_ssl);
             if (0 != error) {
-                throw std::runtime_error("Failed to reset ssl session.");
+                throw tls::exception(error);
             }
         }
 
@@ -47,7 +47,7 @@ namespace tls {
         void set_client_id(const unsigned char * data, size_t data_length) {
             auto error = mbedtls_ssl_set_client_transport_id(&m_ssl, data, data_length);
             if (0 != error) {
-                throw std::runtime_error("Failed to set client id.");
+                throw tls::exception(error);
             }
         }
 
@@ -66,18 +66,11 @@ namespace tls {
             } while(error == MBEDTLS_ERR_SSL_WANT_READ
                  || error == MBEDTLS_ERR_SSL_WANT_WRITE);
 
-            if (error == MBEDTLS_ERR_SSL_HELLO_VERIFY_REQUIRED) {
-                return false;
-            } else if (0 != error) {
-                constexpr int size = 1024;
-                char error_buf[size];
-                mbedtls_strerror(error, error_buf, size);
-                std::cout << error_buf << std::endl;
-                return false;
-                //throw std::runtime_error("Failed to perform handshake.");
+            if (0 != error && MBEDTLS_ERR_SSL_HELLO_VERIFY_REQUIRED != error) {
+                std::cout << error_string(error) << std::endl;
             }
 
-            return true;
+            return 0 == error;
         }
 
         int read(char * data, size_t data_length) {
@@ -99,7 +92,7 @@ namespace tls {
                         ret = 0;
                         break;
                     default:
-                        throw std::runtime_error("Failed to read data.");
+                        throw tls::exception(ret);
                 }
             }
 
@@ -116,7 +109,7 @@ namespace tls {
                   || MBEDTLS_ERR_SSL_WANT_WRITE == ret);
 
             if (ret < 0) {
-                throw std::runtime_error("Failed to write data.");
+                throw tls::exception(ret);
             }
 
             return ret;

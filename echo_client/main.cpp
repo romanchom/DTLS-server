@@ -20,8 +20,8 @@ int main(int argc, char ** argv) {
     SSL_CTX * ctx = SSL_CTX_new(DTLSv1_2_client_method());
     SSL_CTX_set_cipher_list(ctx, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 
-    SSL_CTX_use_certificate_chain_file(ctx, "client_cert.pem");
-    SSL_CTX_use_PrivateKey_file(ctx, "client_key.pem", SSL_FILETYPE_PEM);
+    SSL_CTX_use_certificate_chain_file(ctx, "client.crt");
+    SSL_CTX_use_PrivateKey_file(ctx, "client.key", SSL_FILETYPE_PEM);
 
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     int enable = 1;

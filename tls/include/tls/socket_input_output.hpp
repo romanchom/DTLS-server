@@ -4,7 +4,6 @@
 
 #include <stdexcept>
 
-#include <mbedtls/config.h>
 #include <mbedtls/ssl.h>
 #include <mbedtls/net_sockets.h>
 

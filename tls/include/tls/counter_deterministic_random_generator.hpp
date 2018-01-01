@@ -2,10 +2,10 @@
 
 #include <stdexcept>
 
-#include <mbedtls/config.h>
 #include <mbedtls/ctr_drbg.h>
 
 #include "random_generator.hpp"
+#include "exception.hpp"
 
 namespace tls {
     class counter_deterministic_random_generator : public random_generator {
@@ -33,7 +33,7 @@ namespace tls {
                 a_entropy->get_callback(), a_entropy->get_data(),
                 reinterpret_cast<const unsigned char *>(data), data_length);
             if (0 != error) {
-                throw std::runtime_error("Failed to seed random byte generator");
+                throw tls::exception(error);
             }
         }
     };

@@ -2,7 +2,6 @@
 
 #include "timer.hpp"
 
-#include <mbedtls/config.h>
 #include <mbedtls/ssl.h>
 #include <mbedtls/timing.h>
 

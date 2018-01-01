@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mbedtls/config.h>
 #include <mbedtls/ssl.h>
 
 namespace tls {

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mbedtls/config.h>
 #include <mbedtls/ssl_cookie.h>
 
 #include "random_generator.hpp"

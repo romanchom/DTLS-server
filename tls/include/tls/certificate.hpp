@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <stdexcept>
 
-#include <mbedtls/config.h>
 #include <mbedtls/x509_crt.h>
 #include <mbedtls/x509.h>
 #include <mbedtls/certs.h>

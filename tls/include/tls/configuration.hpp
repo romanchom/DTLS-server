@@ -2,15 +2,13 @@
 
 #include <stdexcept>
 
-#include <mbedtls/config.h>
 #include <mbedtls/ssl.h>
 
 #include "certificate.hpp"
-#include "public_key.hpp"
+#include "private_key.hpp"
 #include "cookie.hpp"
 #include "random_generator.hpp"
-
-#include <iostream>
+#include "exception.hpp"
 
 namespace tls {
     enum class endpoint : int {
@@ -26,6 +24,12 @@ namespace tls {
     enum class preset : int {
         default_ = MBEDTLS_SSL_PRESET_DEFAULT,
         suiteb = MBEDTLS_SSL_PRESET_SUITEB,
+    };
+
+    enum class authentication_mode : int {
+        none = MBEDTLS_SSL_VERIFY_NONE,
+        optional = MBEDTLS_SSL_VERIFY_OPTIONAL,
+        required = MBEDTLS_SSL_VERIFY_REQUIRED,
     };
 
     class configuration {
@@ -52,7 +56,7 @@ namespace tls {
                 static_cast<int>(p));
 
             if (0 != error) {
-                throw std::runtime_error("Failed to set configuration defaults.");
+                throw tls::exception(error);
             }
         }
 
@@ -64,10 +68,10 @@ namespace tls {
             mbedtls_ssl_conf_ca_chain(&m_configuration, cert->get(), nullptr);
         }
 
-        void set_own_certificate(certificate * cert, public_key * key) {
-            auto ret = mbedtls_ssl_conf_own_cert(&m_configuration, cert->get(), key->get());
-            if (0 != ret) {
-                throw std::runtime_error("Failed to set own certificate and key.");
+        void set_own_certificate(certificate * cert, private_key * key) {
+            auto error = mbedtls_ssl_conf_own_cert(&m_configuration, cert->get(), key->get());
+            if (0 != error) {
+                throw tls::exception(error);
             }
         }
 
@@ -75,6 +79,9 @@ namespace tls {
             mbedtls_ssl_conf_dtls_cookies(&m_configuration, a_cookie->get_writer(), a_cookie->get_checker(), a_cookie->get_data());
         }
 
-        
+        void set_authentication_mode(authentication_mode mode) {
+            mbedtls_ssl_conf_authmode(&m_configuration,
+                static_cast<int>(mode));
+        }
     };
 }
