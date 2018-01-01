@@ -59,6 +59,13 @@ namespace tls {
                 bio->get_receiver_timeout());
         }
 
+        void set_host_name(const char * host_name) {
+            int error = mbedtls_ssl_set_hostname(&m_ssl, host_name);
+            if (0 != error) {
+                throw tls::exception(error);
+            }
+        }
+
         bool handshake() {
             int error;
             do {
@@ -88,8 +95,7 @@ namespace tls {
                         ret = 0;
                         break;
                     case MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY:
-                        // TODO invoke callback
-                        ret = 0;
+                        ret = -1;
                         break;
                     default:
                         throw tls::exception(ret);

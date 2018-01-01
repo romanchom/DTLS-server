@@ -18,7 +18,7 @@ namespace tls {
     public:
         using session_listener_factory_t = std::function<std::unique_ptr<session_listener>()>;
         
-        server(const char * key_name, const char* certificate_name);
+        server(private_key * own_key, certificate * own_certificate, certificate * ca_certificate);
         ~server();
         void listen(uint16_t port);
         void set_session_listener_factory(session_listener_factory_t callback) {
@@ -29,13 +29,10 @@ namespace tls {
         void create_ssl();
         void accept_client();
 
-        uint16_t m_port;
-        tls::certificate m_certificate;
-        tls::private_key m_key;
-        tls::standard_entropy m_entropy;
-        tls::counter_deterministic_random_generator m_random;
-        tls::configuration m_tls_configuration;
-        tls::standard_cookie m_cookie;
+        standard_entropy m_entropy;
+        counter_deterministic_random_generator m_random;
+        configuration m_tls_configuration;
+        standard_cookie m_cookie;
 
         session_listener_factory_t m_session_listener_factory;
 

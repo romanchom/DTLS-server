@@ -15,7 +15,6 @@ namespace tls {
 
         ~standard_entropy() {
             mbedtls_entropy_free(&m_entropy);
-            delete &m_entropy;
         }
         
         entropy_callback_t * get_callback() override {

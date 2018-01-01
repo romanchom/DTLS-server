@@ -2,10 +2,10 @@
 
 #include "basic_input_output.hpp"
 
-#include <stdexcept>
-
 #include <mbedtls/ssl.h>
 #include <mbedtls/net_sockets.h>
+
+#include "exception.hpp"
 
 namespace tls {
     enum class protocol : int {
@@ -49,7 +49,7 @@ namespace tls {
         void bind (const char * bind_ip, const char *port, protocol proto) {
             auto error = mbedtls_net_bind(&m_net, bind_ip, port, static_cast<int>(proto));
             if (0 != error) {
-                throw std::runtime_error("Failed to bind socket.");
+                throw tls::exception(error);
             }
         }
 
@@ -59,5 +59,12 @@ namespace tls {
                 sizeof(a_address->data),
                 &a_address->size);
         }
+
+        void connect(const char * ip, const char *port, protocol proto) {
+            int error = mbedtls_net_connect(&m_net, ip, port, static_cast<int>(proto));
+            if (0 != error) {
+                throw tls::exception(error);
+            }
+        }        
     };
 }

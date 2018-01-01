@@ -14,9 +14,10 @@ namespace tls {
     public:
         session(class server * parent, std::unique_ptr<tls::ssl> && a_ssl, std::unique_ptr<tls::basic_input_output> && a_io);
         ~session();
-        int write(const char * data, int size);
         void set_listener(std::unique_ptr<session_listener> && a_listener);
         void start();
+        void end();
+        int write(const char * data, int size);
     private:
         void thread_function();
         

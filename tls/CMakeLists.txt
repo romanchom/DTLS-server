@@ -4,6 +4,7 @@ project(tls)
 
 set(SOURCES
     source/exception.cpp
+    source/client.cpp
     source/server.cpp
     source/session_listener.cpp
     source/session.cpp

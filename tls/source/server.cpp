@@ -10,11 +10,8 @@
 
 using namespace std;
 namespace tls {
-    server::server(const char * key_name, const char* certificate_name)
+    server::server(private_key * own_key, certificate * own_certificate, certificate * ca_certificate)
     {
-        m_certificate.parse_file(certificate_name);
-        m_key.parse_file(key_name, nullptr);
-        
         m_random.seed(&m_entropy, "ASDQWE", 6);
 
         m_cookie.setup(&m_random);
@@ -22,8 +19,8 @@ namespace tls {
         m_tls_configuration.set_defaults(endpoint::server, transport::datagram, preset::default_);
         m_tls_configuration.set_authentication_mode(authentication_mode::required);
         m_tls_configuration.set_random_generator(&m_random);
-        m_tls_configuration.set_certifiate_authority_chain(&m_certificate);
-        m_tls_configuration.set_own_certificate(&m_certificate, &m_key);
+        m_tls_configuration.set_certifiate_authority_chain(ca_certificate);
+        m_tls_configuration.set_own_certificate(own_certificate, own_key);
         m_tls_configuration.set_dtls_cookies(&m_cookie);
     }
 

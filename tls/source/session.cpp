@@ -28,6 +28,7 @@ namespace tls {
 
     void session::start() {
         m_thread = std::thread([this]() {
+            session_end_reason reason(session_end_reason::user_request);
             std::cout << "Session started" << std::endl;
             m_listener->on_session_started();
             while (m_should_run.load()) {
@@ -36,9 +37,23 @@ namespace tls {
                 if(size >= 0) {
                     std::cout << "Received " << size << " bytes" << std::endl;
                     m_listener->on_data_received(m_buffer.data(), size);
+                } else {
+                    reason = session_end_reason::peer_request;
+                    break;
                 }
             }
-            m_listener->on_session_ended();
+
+            if (session_end_reason::user_request == reason
+                || session_end_reason::timeout == reason)
+            {
+                m_ssl->close_notify();
+            }
+
+            m_listener->on_session_ended(reason);
         });
+    }
+
+    void session::end() {
+        m_should_run.store(false);
     }
 }
