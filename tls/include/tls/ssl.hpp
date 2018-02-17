@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <string>
 
 #include <mbedtls/ssl.h>
 

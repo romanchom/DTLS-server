@@ -34,11 +34,12 @@ namespace tls {
     };
 
     class configuration {
+    public:
+        using debug_callback_t = void (void *, int, const char *, int, const char *);
     private:
         mbedtls_ssl_config m_configuration;
         debug_callback_t debug_callback;
     public:
-        using debug_callback_t = void (void *, int, const char *, int, const char *);
         configuration() {
             mbedtls_ssl_config_init(&m_configuration);
         }

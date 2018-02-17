@@ -1,6 +1,5 @@
 #include "session.hpp"
 
-#include <unistd.h>
 #include <iostream>
 
 namespace tls {
