@@ -13,6 +13,7 @@ namespace tls {
         m_tls_configuration.set_own_certificate(own_certificate, own_key);
 
         m_ssl.setup(&m_tls_configuration);
+        m_ssl.set_timer(&m_timer);
     }
 
     client::~client() {
@@ -25,7 +26,6 @@ namespace tls {
         m_socket.connect(address, port, protocol::udp);
         //m_ssl.set_host_name("");
         m_ssl.set_input_output(&m_socket);
-        m_ssl.set_timer(&m_timer);
         m_is_connected = m_ssl.handshake();
         return m_is_connected;
     }

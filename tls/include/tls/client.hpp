@@ -8,6 +8,9 @@
 #include "standard_timer.hpp"
 
 namespace tls {
+    class private_key;
+    class certificate;
+    
     class client {
     public:
         client(private_key * own_key, certificate * own_certificate, certificate * ca_certificate);

@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include <mbedtls/ssl.h>
+#include <mbedtls/debug.h>
 
 #include "certificate.hpp"
 #include "private_key.hpp"
@@ -35,7 +36,9 @@ namespace tls {
     class configuration {
     private:
         mbedtls_ssl_config m_configuration;
+        debug_callback_t debug_callback;
     public:
+        using debug_callback_t = void (void *, int, const char *, int, const char *);
         configuration() {
             mbedtls_ssl_config_init(&m_configuration);
         }
@@ -82,6 +85,11 @@ namespace tls {
         void set_authentication_mode(authentication_mode mode) {
             mbedtls_ssl_conf_authmode(&m_configuration,
                 static_cast<int>(mode));
+        }
+
+        void enable_debug(debug_callback_t * callback, int debug_threshold) {
+            mbedtls_ssl_conf_dbg(&m_configuration, callback, NULL);
+            mbedtls_debug_set_threshold(debug_threshold);
         }
     };
 }

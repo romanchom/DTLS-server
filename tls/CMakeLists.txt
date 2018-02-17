@@ -10,7 +10,7 @@ set(SOURCES
     source/session.cpp
 )
 
-add_library(tls ${SOURCES})
+add_library(tls SHARED ${SOURCES})
 target_include_directories(tls PUBLIC include)
 target_include_directories(tls PRIVATE include/tls)
 target_link_libraries(tls

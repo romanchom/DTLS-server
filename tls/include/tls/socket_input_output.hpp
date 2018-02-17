@@ -46,7 +46,7 @@ namespace tls {
             return &mbedtls_net_recv_timeout;
         }
 
-        void bind (const char * bind_ip, const char *port, protocol proto) {
+        void bind(const char * bind_ip, const char *port, protocol proto) {
             auto error = mbedtls_net_bind(&m_net, bind_ip, port, static_cast<int>(proto));
             if (0 != error) {
                 throw tls::exception(error);
@@ -58,6 +58,9 @@ namespace tls {
                 reinterpret_cast<void *>(&a_address->data),
                 sizeof(a_address->data),
                 &a_address->size);
+            if (0 != error) {
+                throw tls::exception(error);
+            }
         }
 
         void connect(const char * ip, const char *port, protocol proto) {

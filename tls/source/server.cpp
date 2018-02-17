@@ -39,8 +39,8 @@ namespace tls {
         auto current_ssl = std::make_unique<ssl>();
         current_ssl->setup(&m_tls_configuration);
         current_ssl->set_timer(&dtls_timer);
-        
-        for (;;) {    
+
+        for (;;) {
             cout << "Reseting state" << endl;
             auto client = std::make_unique<socket_input_output>();
             
