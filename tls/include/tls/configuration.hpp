@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <cstdint>
 
 #include <mbedtls/ssl.h>
 #include <mbedtls/debug.h>
@@ -91,6 +92,13 @@ namespace tls {
         void enable_debug(debug_callback_t * callback, int debug_threshold) {
             mbedtls_ssl_conf_dbg(&m_configuration, callback, NULL);
             mbedtls_debug_set_threshold(debug_threshold);
+        }
+
+        void set_shared_key(uint8_t * shared_key, size_t shared_key_length, uint8_t * identity, size_t identity_length) {
+            int error = mbedtls_ssl_conf_psk(&m_configuration, shared_key, shared_key_length, identity, identity_length);
+            if (0 != error) {
+                throw tls::exception(error);
+            }
         }
     };
 }
