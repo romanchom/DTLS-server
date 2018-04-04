@@ -94,11 +94,15 @@ namespace tls {
             mbedtls_debug_set_threshold(debug_threshold);
         }
 
-        void set_shared_key(uint8_t * shared_key, size_t shared_key_length, uint8_t * identity, size_t identity_length) {
+        void set_shared_key(uint8_t const * shared_key, size_t shared_key_length, uint8_t const * identity, size_t identity_length) {
             int error = mbedtls_ssl_conf_psk(&m_configuration, shared_key, shared_key_length, identity, identity_length);
             if (0 != error) {
                 throw tls::exception(error);
             }
+        }
+
+        void set_cipher_suites(int const * cipher_suites) {
+            mbedtls_ssl_conf_ciphersuites(&m_configuration, cipher_suites);
         }
     };
 }
