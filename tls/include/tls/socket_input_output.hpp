@@ -2,6 +2,10 @@
 
 #include "basic_input_output.hpp"
 
+#include <string>
+#include <sstream>
+#include <iomanip>
+
 #include <mbedtls/ssl.h>
 #include <mbedtls/net_sockets.h>
 
@@ -16,6 +20,30 @@ namespace tls {
     struct address {
         char data[16];
         size_t size;
+        std::string to_string() const {
+            std::stringstream ss;
+            if (4 == size) {
+                int i = 0;
+                while (true) {
+                    ss << static_cast<int>(data[i]);
+                    ++i;
+                    if (i >= 4) { break; }
+                    ss << '.';
+                }
+            } else if (16 == size) {
+                ss << std::uppercase << std::setfill('0') << std::setw(4) << std::hex;
+                int i = 0;
+                while (true) {
+                    ss << static_cast<int>(data[i]);
+                    ++i;
+                    if (i >= 16) { break; }
+                    ss << ':';
+                }
+            } else {
+                throw std::runtime_error("Unrepresentable ip address.");
+            }
+            return ss.str();
+        }
     };
 
     class socket_input_output : public basic_input_output {
