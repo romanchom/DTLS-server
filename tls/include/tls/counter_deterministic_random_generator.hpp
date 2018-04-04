@@ -36,5 +36,12 @@ namespace tls {
                 throw tls::exception(error);
             }
         }
+
+        void generate(unsigned char * destination, size_t size) {
+            int error = mbedtls_ctr_drbg_random(reinterpret_cast<void *>(&m_generator), destination, size);
+            if (0 != error) {
+                throw tls::exception(error);
+            }
+        }
     };
 }
