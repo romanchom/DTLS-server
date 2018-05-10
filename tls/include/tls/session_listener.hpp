@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdlib>
+#include <cstdint>
 
 namespace tls {
     enum class session_end_reason {
@@ -19,7 +20,7 @@ namespace tls {
 
         void set_session(class session * a_session);
         virtual void on_session_started() = 0;
-        virtual void on_data_received(const char * data, size_t data_length) = 0;
+        virtual void on_data_received(uint8_t const * data, size_t data_length) = 0;
         virtual void on_session_ended(session_end_reason reason) = 0;
     };
 }

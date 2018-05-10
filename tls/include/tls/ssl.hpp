@@ -81,12 +81,10 @@ namespace tls {
             return 0 == error;
         }
 
-        int read(char * data, size_t data_length) {
+        int read(uint8_t * data, size_t data_length) {
             int ret;
             do {
-                ret = mbedtls_ssl_read(&m_ssl,
-                    reinterpret_cast<unsigned char *>(data),
-                    data_length);
+                ret = mbedtls_ssl_read(&m_ssl, data, data_length);
             } while (MBEDTLS_ERR_SSL_WANT_READ == ret
                   || MBEDTLS_ERR_SSL_WANT_WRITE == ret);
 
@@ -106,12 +104,10 @@ namespace tls {
             return ret;
         }
 
-        int write(const char * data, size_t data_length) {
+        int write(const uint8_t * data, size_t data_length) {
             int ret;
             do {
-                ret = mbedtls_ssl_write(&m_ssl, 
-                    reinterpret_cast<const unsigned char *>(data),
-                    data_length);
+                ret = mbedtls_ssl_write(&m_ssl, data, data_length);
             } while (MBEDTLS_ERR_SSL_WANT_READ == ret
                   || MBEDTLS_ERR_SSL_WANT_WRITE == ret);
 

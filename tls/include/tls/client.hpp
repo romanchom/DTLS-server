@@ -18,8 +18,8 @@ namespace tls {
 
         bool connect(const char * address, const char * port);
         void disconnect();
-        int read(char * data, size_t data_length);
-        int write(const char * data, size_t data_length);
+        int read(uint8_t * data, size_t data_length);
+        int write(uint8_t const * data, size_t data_length);
     private:
         standard_entropy m_entropy;
         counter_deterministic_random_generator m_random;

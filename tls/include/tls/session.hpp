@@ -17,7 +17,7 @@ namespace tls {
         void set_listener(std::unique_ptr<session_listener> && a_listener);
         void start();
         void end();
-        int write(const char * data, int size);
+        int write(uint8_t const * data, int size);
     private:
         void thread_function();
         
@@ -29,6 +29,6 @@ namespace tls {
         std::unique_ptr<tls::ssl> m_ssl;
         std::unique_ptr<tls::basic_input_output> m_io;
 
-        std::vector<char> m_buffer;
+        std::vector<uint8_t> m_buffer;
     };
 }

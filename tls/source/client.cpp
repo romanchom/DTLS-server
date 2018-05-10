@@ -38,7 +38,7 @@ namespace tls {
         }
     }
     
-    int client::read(char * data, size_t data_length) {
+    int client::read(uint8_t * data, size_t data_length) {
         int ret = m_ssl.read(data, data_length);
         if (ret < 0) {
             m_is_connected = false;
@@ -46,7 +46,7 @@ namespace tls {
         return ret;
     }
 
-    int client::write(const char * data, size_t data_length) {
+    int client::write(uint8_t const * data, size_t data_length) {
         return m_ssl.write(data, data_length);
     }
 }

@@ -16,7 +16,7 @@ namespace tls {
         m_thread.join();
     }
 
-    int session::write(const char * data, int size) {
+    int session::write(uint8_t const * data, int size) {
         return m_ssl->write(data, size);
     }
 
